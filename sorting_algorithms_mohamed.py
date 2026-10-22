@@ -26,35 +26,27 @@ def quick_sort(arr, start, end):
 # 2. Merge Sort
 def merge_sort(arr):
     if len(arr) <= 1:
-        return
+        return arr
 
     mid = len(arr) // 2
-    left = arr[:mid]
-    right = arr[mid:]
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
 
-    merge_sort(left)
-    merge_sort(right)
-
-    i = j = k = 0
+    result = []
+    i = j = 0
 
     while i < len(left) and j < len(right):
         if left[i] <= right[j]:
-            arr[k] = left[i]
+            result.append(left[i])
             i += 1
         else:
-            arr[k] = right[j]
+            result.append(right[j])
             j += 1
-        k += 1
 
-    while i < len(left):
-        arr[k] = left[i]
-        i += 1
-        k += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
 
-    while j < len(right):
-        arr[k] = right[j]
-        j += 1
-        k += 1
+    return result
 
 
 # 3. Heap Sort
@@ -104,7 +96,7 @@ if __name__ == "__main__":
 
         merge_array = original.copy()
         start_time = time.perf_counter()
-        merge_sort(merge_array)
+        merge_array = merge_sort(merge_array)
         merge_time = time.perf_counter() - start_time
 
         heap_array = original.copy()
